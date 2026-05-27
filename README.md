@@ -2,6 +2,16 @@
 
 Ethiopia's **14 admin1 regions** (post-SNNPR split, 2025) as ready-to-render SVG paths + metadata. Zero runtime dependencies. ESM + CJS + TypeScript types.
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/mikiyas-degefu/ethiopia-regions-map/main/assets/preview-outline.svg" alt="Ethiopia 14-region outline map with region codes" width="48%" />
+  &nbsp;
+  <img src="https://raw.githubusercontent.com/mikiyas-degefu/ethiopia-regions-map/main/assets/preview-choropleth.svg" alt="Ethiopia 14-region choropleth with sample population data" width="48%" />
+</p>
+
+<p align="center">
+  <sub>Both images above are rendered by <code>renderEthiopiaMap()</code> from this package — no external image editor involved.</sub>
+</p>
+
 The 14 regions covered:
 
 | Code | Name                  | Type    | Capital       | Since |
