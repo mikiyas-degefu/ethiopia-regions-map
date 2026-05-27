@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ethiopia-regions-map · Ethiopia's 14 regions as ready-to-render SVG paths</title>
+    <meta name="description" content="A zero-dependency JavaScript / TypeScript package shipping Ethiopia's 14 admin1 regions (post-SNNPR split, 2025) as ready-to-render SVG paths and metadata. Build choropleth maps in the browser with one function call." />
+    <meta name="keywords" content="ethiopia map, ethiopia regions, javascript map library, svg ethiopia, choropleth ethiopia, ethiopia geojson, npm ethiopia, react ethiopia map, horn of africa, ADM1 boundaries, geoBoundaries" />
+    <meta name="author" content="Mikiyas Degefu" />
+    <link rel="canonical" href="https://mikiyas-degefu.github.io/ethiopia-regions-map/" />
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:title" content="ethiopia-regions-map · Ethiopia's 14 regions as SVG paths" />
+    <meta property="og:description" content="Zero-dependency npm package shipping Ethiopia's 14 admin1 regions as ready-to-render SVG paths. Build choropleth maps in the browser with one function call." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://mikiyas-degefu.github.io/ethiopia-regions-map/" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/mikiyas-degefu/ethiopia-regions-map/main/assets/preview-choropleth.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ethiopia-regions-map" />
+    <meta name="twitter:description" content="Ethiopia's 14 regions as ready-to-render SVG paths. Zero deps." />
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/mikiyas-degefu/ethiopia-regions-map/main/assets/preview-choropleth.svg" />
+
+    <!-- Structured data for Google -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareSourceCode",
+        "name": "ethiopia-regions-map",
+        "description": "Ethiopia's 14 admin1 regions (post-SNNPR split, 2025) as ready-to-render SVG paths + metadata. Zero runtime dependencies.",
+        "codeRepository": "https://github.com/mikiyas-degefu/ethiopia-regions-map",
+        "programmingLanguage": ["JavaScript", "TypeScript"],
+        "license": "https://opensource.org/licenses/MIT",
+        "author": {
+          "@type": "Person",
+          "name": "Mikiyas Degefu",
+          "url": "https://github.com/mikiyas-degefu"
+        }
+      }
+    </script>
+
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="brand">
+          <span class="logo" aria-hidden="true">🇪🇹</span>
+          <strong>ethiopia-regions-map</strong>
+        </div>
+        <nav class="site-nav" aria-label="Primary">
+          <a href="#demo">Demo</a>
+          <a href="#install">Install</a>
+          <a href="#api">API</a>
+          <a href="https://github.com/mikiyas-degefu/ethiopia-regions-map" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://www.npmjs.com/package/ethiopia-regions-map" target="_blank" rel="noopener" class="nav-cta">npm</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container">
+          <h1>Ethiopia's <span class="accent">14 regions</span> as ready-to-render SVG paths.</h1>
+          <p class="lead">
+            A zero-dependency JavaScript / TypeScript package shipping the
+            post-SNNPR-split (2025) administrative boundaries — pre-projected
+            for instant rendering in the browser, Node, or any framework.
+          </p>
+          <div class="install-box" aria-label="Install command">
+            <code>npm install ethiopia-regions-map</code>
+            <button type="button" id="copy-install" aria-label="Copy install command">Copy</button>
+          </div>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="#demo">Try the demo</a>
+            <a class="btn" href="https://github.com/mikiyas-degefu/ethiopia-regions-map" target="_blank" rel="noopener">View on GitHub</a>
+          </div>
+          <div class="badges" aria-label="Package badges">
+            <img alt="npm version" src="https://img.shields.io/npm/v/ethiopia-regions-map?style=flat-square&color=14532d" />
+            <img alt="bundle size" src="https://img.shields.io/bundlephobia/minzip/ethiopia-regions-map?style=flat-square&color=075985&label=min%2Bgzip" />
+            <img alt="license" src="https://img.shields.io/npm/l/ethiopia-regions-map?style=flat-square&color=4d9221" />
+            <img alt="types" src="https://img.shields.io/npm/types/ethiopia-regions-map?style=flat-square&color=0f172a" />
+          </div>
+        </div>
+      </section>
+
+      <section id="demo" class="section">
+        <div class="container">
+          <h2>Live demo</h2>
+          <p class="section-lead">
+            Everything below is rendered by <code>renderEthiopiaMap()</code> in
+            your browser. Change the controls — the SVG updates immediately.
+          </p>
+
+          <div class="demo-card">
+            <div class="demo-controls" role="toolbar" aria-label="Map controls">
+              <label>
+                <span>Palette</span>
+                <select id="palette">
+                  <option value="green" selected>green</option>
+                  <option value="blue">blue</option>
+                  <option value="red">red</option>
+                  <option value="amber">amber</option>
+                  <option value="violet">violet</option>
+                  <option value="teal">teal</option>
+                  <option value="slate">slate</option>
+                  <option value="diverging-rdbu">diverging — red/blue</option>
+                  <option value="diverging-brbg">diverging — brown/teal</option>
+                  <option value="diverging-piyg">diverging — pink/green</option>
+                </select>
+              </label>
+              <label>
+                <span>Mode</span>
+                <select id="mode">
+                  <option value="population" selected>Population (M)</option>
+                  <option value="random">Random values</option>
+                  <option value="empty">No data (outline only)</option>
+                </select>
+              </label>
+              <label class="check">
+                <input type="checkbox" id="labels" checked />
+                <span>Show region codes</span>
+              </label>
+              <button type="button" id="reroll" class="btn-soft" aria-label="Generate new random values">↻ Reroll</button>
+            </div>
+
+            <div id="map" class="demo-map" aria-live="polite"></div>
+
+            <div class="demo-readout" id="readout">
+              Hover a region to see its details.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="install" class="section section-alt">
+        <div class="container">
+          <h2>Quick start</h2>
+          <p class="section-lead">Three common ways to use the package.</p>
+
+          <div class="grid-2">
+            <div class="snippet">
+              <h3>Drop-in choropleth</h3>
+              <pre><code>import { renderEthiopiaMap } from 'ethiopia-regions-map'
+
+const svg = renderEthiopiaMap({
+  values: { OR: 35.4, AM: 21.1, TI: 4.2 },
+  palette: 'green',
+  showLabels: true,
+  width: 800,
+})
+
+document.getElementById('map').innerHTML = svg</code></pre>
+            </div>
+
+            <div class="snippet">
+              <h3>React component</h3>
+              <pre><code>import {
+  ETHIOPIA_GEOMETRY,
+  ETHIOPIA_RENDER_ORDER,
+  ETHIOPIA_VIEWBOX,
+} from 'ethiopia-regions-map'
+
+&lt;svg viewBox={`0 0 ${ETHIOPIA_VIEWBOX.width} ${ETHIOPIA_VIEWBOX.height}`}&gt;
+  {ETHIOPIA_RENDER_ORDER.map((code) =&gt; (
+    &lt;path
+      key={code}
+      d={ETHIOPIA_GEOMETRY[code].d}
+      fill="#e5e7eb"
+      stroke="#fff"
+    /&gt;
+  ))}
+&lt;/svg&gt;</code></pre>
+            </div>
+
+            <div class="snippet">
+              <h3>Just the data</h3>
+              <pre><code>import {
+  ETHIOPIAN_REGIONS,
+  getEthiopianRegion,
+  findEthiopianRegionByName,
+} from 'ethiopia-regions-map'
+
+ETHIOPIAN_REGIONS.length              // 14
+getEthiopianRegion('OR')              // { name: 'Oromia', … }
+findEthiopianRegionByName('amhara')   // { code: 'AM', … }</code></pre>
+            </div>
+
+            <div class="snippet">
+              <h3>Custom palette</h3>
+              <pre><code>renderEthiopiaMap({
+  values,
+  customPalette: {
+    min: '#fef3c7',
+    mid: '#f59e0b',
+    max: '#7c2d12',
+    diverging: true,
+  },
+})</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="api" class="section">
+        <div class="container">
+          <h2>API at a glance</h2>
+          <p class="section-lead">
+            Everything ships with TypeScript types. ESM + CJS dual package.
+          </p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Export</th>
+                  <th>Type</th>
+                  <th>What it is</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>ETHIOPIAN_REGIONS</code></td>
+                  <td><code>EthiopianRegion[]</code></td>
+                  <td>All 14 regions with name, type, capital, year established.</td>
+                </tr>
+                <tr>
+                  <td><code>ETHIOPIA_GEOMETRY</code></td>
+                  <td><code>Record&lt;Code, Geometry&gt;</code></td>
+                  <td>SVG <code>d</code> path + centroid per region (viewBox 1000×774).</td>
+                </tr>
+                <tr>
+                  <td><code>ETHIOPIA_VIEWBOX</code></td>
+                  <td><code>{ width, height }</code></td>
+                  <td>Native SVG dimensions — <code>1000 × 774</code>.</td>
+                </tr>
+                <tr>
+                  <td><code>ETHIOPIA_RENDER_ORDER</code></td>
+                  <td><code>Code[]</code></td>
+                  <td>Suggested z-order — enclaves (AA, DD, HA) paint last.</td>
+                </tr>
+                <tr>
+                  <td><code>getEthiopianRegion(code)</code></td>
+                  <td><code>EthiopianRegion?</code></td>
+                  <td>Lookup by region code (case-insensitive).</td>
+                </tr>
+                <tr>
+                  <td><code>findEthiopianRegionByName(name)</code></td>
+                  <td><code>EthiopianRegion?</code></td>
+                  <td>Lookup by region name (case-insensitive).</td>
+                </tr>
+                <tr>
+                  <td><code>renderEthiopiaMap(opts?)</code></td>
+                  <td><code>string</code></td>
+                  <td>Complete SVG markup string — drop into <code>innerHTML</code>.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="regions" class="section section-alt">
+        <div class="container">
+          <h2>The 14 regions</h2>
+          <p class="section-lead">
+            Eleven regional states plus two chartered cities (Addis Ababa,
+            Dire Dawa). The four post-SNNPR-split regions — Sidama (2020),
+            South West (2021), Central Ethiopia + South Ethiopia (2023) —
+            are reconstructed by unioning their constituent ADM2 zones.
+          </p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Code</th><th>Name</th><th>Type</th><th>Capital</th><th>Since</th></tr>
+              </thead>
+              <tbody id="regions-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container narrow">
+          <h2>About</h2>
+          <p>
+            Boundary polygons are derived from
+            <a href="https://www.geoboundaries.org" target="_blank" rel="noopener">geoBoundaries</a>
+            <strong>gbOpen ETH ADM1 + ADM2</strong> (2025 release) under CC-BY 4.0.
+            Polygons are pre-projected to an SVG pixel grid (equirectangular
+            with cos(lat) correction) — there's no runtime projection cost.
+          </p>
+          <p>
+            If you need raw GeoJSON in longitude/latitude coordinates,
+            grab them directly from geoBoundaries; this package optimizes
+            for the most common case: rendering a clean, lightweight,
+            framework-agnostic map of Ethiopia in the browser.
+          </p>
+          <p>
+            Built and maintained by
+            <a href="https://github.com/mikiyas-degefu" target="_blank" rel="noopener">Mikiyas Degefu</a>.
+            MIT-licensed. Issues and pull requests welcome.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>
+          <a href="https://github.com/mikiyas-degefu/ethiopia-regions-map" target="_blank" rel="noopener">GitHub</a>
+          ·
+          <a href="https://www.npmjs.com/package/ethiopia-regions-map" target="_blank" rel="noopener">npm</a>
+          ·
+          <a href="https://github.com/mikiyas-degefu/ethiopia-regions-map/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>
+          ·
+          Data:
+          <a href="https://www.geoboundaries.org" target="_blank" rel="noopener">geoBoundaries gbOpen</a> (CC-BY 4.0)
+        </p>
+        <p class="copyright">© <span id="year"></span> Mikiyas Degefu.</p>
+      </div>
+    </footer>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

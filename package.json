@@ -23,7 +23,7 @@
   "bugs": {
     "url": "https://github.com/mikiyas-degefu/ethiopia-regions-map/issues"
   },
-  "homepage": "https://github.com/mikiyas-degefu/ethiopia-regions-map#readme",
+  "homepage": "https://mikiyas-degefu.github.io/ethiopia-regions-map/",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
