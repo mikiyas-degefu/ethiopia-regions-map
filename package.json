@@ -1,6 +1,6 @@
 {
   "name": "ethiopia-regions-map",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Ethiopia's 14 admin1 regions (post-SNNPR split, 2025) as ready-to-render SVG paths + metadata. Zero runtime dependencies.",
   "keywords": [
     "ethiopia",
