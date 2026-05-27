@@ -38,5 +38,13 @@ export type {
   AdminType,
 } from './ethiopia-regions'
 
-export { renderEthiopiaMap, PALETTES } from './render'
-export type { PaletteName, RenderOptions } from './render'
+export { renderEthiopiaMap, PALETTES, presets } from './render'
+export type {
+  PaletteName,
+  PaletteStops,
+  RenderOptions,
+  ValueFormatter,
+  RegionLabelMode,
+  LegendPosition,
+  LegendOptions,
+} from './render'

@@ -112,22 +112,60 @@ findEthiopianRegionByName('amhara')  // { code: 'AM', name: 'Amhara', … } (cas
 
 ### `RenderOptions`
 
-| Option           | Default       | Description                                                                  |
-| ---------------- | ------------- | ---------------------------------------------------------------------------- |
-| `values`         | `undefined`   | `{ [RegionCode]: number }` — tints each region by the colour scale.          |
-| `palette`        | `'green'`     | One of `'blue' \| 'green' \| 'red' \| 'amber' \| 'violet' \| 'teal' \| 'slate' \| 'diverging-rdbu' \| 'diverging-brbg' \| 'diverging-piyg'`. |
-| `customPalette`  | `undefined`   | `{ min, mid?, max, diverging }` — overrides `palette`.                       |
-| `defaultFill`    | `'#e5e7eb'`   | Fill when `values` is not supplied.                                          |
-| `noDataColor`    | `'#f3f4f6'`   | Fill for regions missing from `values`.                                      |
-| `stroke`         | `'#ffffff'`   | Boundary colour.                                                             |
-| `strokeWidth`    | `0.8`         | Boundary width in SVG units.                                                 |
-| `width`          | `1000`        | Output SVG width in pixels (height derived).                                 |
-| `showLabels`     | `false`       | Print region code at each centroid.                                          |
-| `labelSize`      | `11`          | Font size for labels.                                                        |
-| `minValue`       | auto         | Clamp the colour scale's low end.                                            |
-| `maxValue`       | auto         | Clamp the colour scale's high end.                                           |
-| `pathClassName`  | `'ethiopia-region'` | Class on each `<path>` — hook CSS hover / click events.                |
-| `svgClassName`   | `'ethiopia-regions-map'` | Class on the root `<svg>`.                                          |
+#### Data input
+
+| Option        | Default     | Description                                                            |
+| ------------- | ----------- | ---------------------------------------------------------------------- |
+| `values`      | `undefined` | `{ [RegionCode]: number }` — tints each region by the colour scale.    |
+| `minValue`    | auto        | Clamp the colour scale's low end.                                      |
+| `maxValue`    | auto        | Clamp the colour scale's high end.                                     |
+
+#### Colour
+
+| Option         | Default     | Description                                                                 |
+| -------------- | ----------- | --------------------------------------------------------------------------- |
+| `palette`      | `'green'`   | One of `'blue' \| 'green' \| 'red' \| 'amber' \| 'violet' \| 'teal' \| 'slate' \| 'diverging-rdbu' \| 'diverging-brbg' \| 'diverging-piyg'`. |
+| `customPalette`| `undefined` | `{ min, mid?, max, diverging }` — overrides `palette`.                      |
+| `colorSteps`   | `1`         | Quantize the scale into N discrete buckets. `5` → classic stepped choropleth. |
+| `defaultFill`  | `'#e5e7eb'` | Fill when `values` is not supplied.                                         |
+| `noDataColor`  | `'#f3f4f6'` | Fill for regions missing from `values`.                                     |
+
+#### Stroke
+
+| Option        | Default     | Description                          |
+| ------------- | ----------- | ------------------------------------ |
+| `stroke`      | `'#ffffff'` | Boundary colour.                     |
+| `strokeWidth` | `0.8`       | Boundary width in SVG units.         |
+
+#### Layout
+
+| Option | Default | Description                                                |
+| ------ | ------- | ---------------------------------------------------------- |
+| `width`| `1000`  | Output SVG width in pixels (height derived from aspect).   |
+
+#### Labels
+
+| Option        | Default     | Description                                                                                |
+| ------------- | ----------- | ------------------------------------------------------------------------------------------ |
+| `regionLabel` | `'none'`    | `'code'` (TI, OR …) · `'name'` (Oromia …) · `'none'` · or `(region) => string` for custom. |
+| `showLabels`  | `false`     | Legacy shortcut — `true` is equivalent to `regionLabel: 'code'`.                           |
+| `labelSize`   | `11`        | Font size for labels.                                                                      |
+
+#### Behavior
+
+| Option        | Default     | Description                                                                                          |
+| ------------- | ----------- | ---------------------------------------------------------------------------------------------------- |
+| `valueFormat` | stringify   | `(value, code) => string` — format numbers in tooltips and legend (e.g. `(v) => v.toFixed(1) + ' M'`). |
+| `legend`      | `false`     | `true` or `LegendOptions { position, title, steps, format }` — render an in-SVG colour legend.       |
+| `highlight`   | `[]`        | Region codes to emphasize (repainted last with a thicker stroke + `is-highlight` class).             |
+| `exclude`     | `[]`        | Region codes to skip rendering entirely.                                                             |
+
+#### DOM hooks
+
+| Option          | Default                  | Description                                          |
+| --------------- | ------------------------ | ---------------------------------------------------- |
+| `pathClassName` | `'ethiopia-region'`      | Class on each `<path>`. Hook CSS hover or click.     |
+| `svgClassName`  | `'ethiopia-regions-map'` | Class on the root `<svg>`.                           |
 
 Each `<path>` carries `data-code`, `data-name`, and (when applicable) `data-value` attributes — handy for event delegation:
 
@@ -135,6 +173,33 @@ Each `<path>` carries `data-code`, `data-name`, and (when applicable) `data-valu
 document.querySelector('.ethiopia-regions-map').addEventListener('mouseover', (e) => {
   const path = e.target.closest('.ethiopia-region')
   if (path) console.log(path.dataset.code, path.dataset.value)
+})
+```
+
+## Style presets
+
+Curated style bundles — spread them into your options to get a finished look in one line:
+
+```ts
+import { presets, renderEthiopiaMap } from 'ethiopia-regions-map'
+
+renderEthiopiaMap({ ...presets.newspaper, values: myData })
+```
+
+| Preset      | What it looks like                                                            |
+| ----------- | ----------------------------------------------------------------------------- |
+| `newspaper` | Slate palette, white fill, thin dark borders, region codes labelled.          |
+| `dark`      | Inverted background, blue palette — for dark dashboards.                      |
+| `minimal`   | No borders, soft fill — clean hero illustration.                              |
+| `bold`      | Red palette, heavy borders, full region names labelled.                       |
+
+Override any single field after the spread — the bundle is just a `Partial<RenderOptions>`:
+
+```ts
+renderEthiopiaMap({
+  ...presets.newspaper,
+  values: myData,
+  legend: { title: 'Population (M)' },   // add a legend on top of the preset
 })
 ```
 

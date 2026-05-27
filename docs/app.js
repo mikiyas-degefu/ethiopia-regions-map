@@ -7,7 +7,9 @@
  */
 import {
   ETHIOPIAN_REGIONS,
+  PALETTES,
   getEthiopianRegion,
+  presets,
   renderEthiopiaMap,
 } from 'https://esm.sh/ethiopia-regions-map'
 
@@ -49,7 +51,8 @@ function currentValues() {
 }
 
 // ───────────────────────────────────────────────────────────────
-// Render
+// Render — uses colorSteps + legend + valueFormat so visitors see
+// the v0.2 features in action.
 // ───────────────────────────────────────────────────────────────
 function draw() {
   const values = currentValues()
@@ -61,6 +64,17 @@ function draw() {
     strokeWidth: state.mode === 'empty' ? 1.2 : 0.8,
     stroke: state.mode === 'empty' ? '#0f172a' : '#ffffff',
     defaultFill: '#f1f5f9',
+    colorSteps: state.mode === 'population' ? 5 : 1,
+    legend:
+      state.mode === 'population'
+        ? { title: 'Population (M)', position: 'bottom-right', format: (v) => v.toFixed(1) }
+        : state.mode === 'random'
+          ? { title: 'Sample value', position: 'bottom-right' }
+          : false,
+    valueFormat:
+      state.mode === 'population'
+        ? (v) => v.toFixed(1) + ' M'
+        : (v) => String(v),
   })
   $('#map').innerHTML = svg
   $('#readout').textContent = labelForMode(state.mode)
@@ -161,6 +175,75 @@ if (tbody) {
 // ───────────────────────────────────────────────────────────────
 const yearEl = $('#year')
 if (yearEl) yearEl.textContent = new Date().getFullYear()
+
+// ───────────────────────────────────────────────────────────────
+// Palette gallery — render every built-in palette as a 6-stop strip
+// using the package's own renderer.
+// ───────────────────────────────────────────────────────────────
+const paletteGallery = $('#palette-gallery')
+if (paletteGallery && PALETTES) {
+  paletteGallery.innerHTML = Object.entries(PALETTES)
+    .map(([name, stops]) => {
+      // Sample 6 stops by passing a tiny synthetic dataset
+      const sample = { A1: 0, A2: 0.2, A3: 0.4, A4: 0.6, A5: 0.8, A6: 1 }
+      // Use the package's lerp by abusing renderEthiopiaMap on a single region.
+      // Simpler approach: hand-build a 6-step gradient strip using the same
+      // PaletteStops the package uses, so we don't need to expose internals.
+      const steps = stops.diverging && stops.mid
+        ? [stops.min, lerpHex(stops.min, stops.mid, 0.5), stops.mid, lerpHex(stops.mid, stops.max, 0.5), stops.max]
+        : [stops.min, lerpHex(stops.min, stops.max, 0.25), lerpHex(stops.min, stops.max, 0.5), lerpHex(stops.min, stops.max, 0.75), stops.max]
+      void sample
+      return `<div class="palette-card">
+        <h4>${escapeHtml(name)} <code>palette: '${escapeHtml(name)}'</code></h4>
+        <div class="palette-strip" aria-hidden="true">
+          ${steps.map((c) => `<span style="background:${c}"></span>`).join('')}
+        </div>
+      </div>`
+    })
+    .join('')
+}
+
+// Minimal hex interpolation — duplicates package internals so this file
+// stays self-contained without a build step.
+function lerpHex(a, b, t) {
+  const h2r = (h) => {
+    const m = h.replace('#', '')
+    const f = m.length === 3 ? m.split('').map((c) => c + c).join('') : m
+    const n = parseInt(f, 16)
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255]
+  }
+  const [ar, ag, ab] = h2r(a)
+  const [br, bg, bb] = h2r(b)
+  const mix = [ar + (br - ar) * t, ag + (bg - ag) * t, ab + (bb - ab) * t]
+    .map((n) => Math.round(n).toString(16).padStart(2, '0'))
+    .join('')
+  return '#' + mix
+}
+
+// ───────────────────────────────────────────────────────────────
+// Presets gallery — render a mini-map per preset using the package
+// itself, alongside the spread-code snippet.
+// ───────────────────────────────────────────────────────────────
+const presetsGallery = $('#presets-gallery')
+if (presetsGallery && presets) {
+  presetsGallery.innerHTML = Object.keys(presets)
+    .map((name) => {
+      const mini = renderEthiopiaMap({
+        ...presets[name],
+        values: POPULATION_MILLIONS,
+        width: 320,
+      })
+      return `<div class="preset-card">
+        <h4>${escapeHtml(name)}</h4>
+        <div class="preset-mini">${mini}</div>
+        <pre><code>renderEthiopiaMap({
+  ...presets.${escapeHtml(name)},
+  values: myData,
+})</code></pre>
+      </div>`
+    })
+    .join('')
+}
 
 // ───────────────────────────────────────────────────────────────
 // First paint

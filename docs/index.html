@@ -203,7 +203,120 @@ findEthiopianRegionByName('amhara')   // { code: 'AM', … }</code></pre>
         </div>
       </section>
 
-      <section id="api" class="section">
+      <section id="config" class="section">
+        <div class="container">
+          <h2>Configuration</h2>
+          <p class="section-lead">
+            Every option is optional. Pass nothing and you get a plain
+            outline. Mix-and-match — they're all independent.
+          </p>
+
+          <h3 class="cfg-group">Data input</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Option</th><th>Default</th><th>What it does</th></tr></thead>
+              <tbody>
+                <tr><td><code>values</code></td><td><code>undefined</code></td><td>Map of region code → number. Drives the colour scale.</td></tr>
+                <tr><td><code>minValue</code></td><td>auto</td><td>Clamp the scale's low end.</td></tr>
+                <tr><td><code>maxValue</code></td><td>auto</td><td>Clamp the scale's high end.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 class="cfg-group">Colour</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Option</th><th>Default</th><th>What it does</th></tr></thead>
+              <tbody>
+                <tr><td><code>palette</code></td><td><code>'green'</code></td><td>One of 10 built-in palettes — see the gallery below.</td></tr>
+                <tr><td><code>customPalette</code></td><td>—</td><td><code>{ min, mid?, max, diverging }</code> — overrides <code>palette</code>.</td></tr>
+                <tr><td><code>colorSteps</code></td><td><code>1</code></td><td>Discrete buckets. <code>5</code> → classic stepped choropleth.</td></tr>
+                <tr><td><code>defaultFill</code></td><td><code>'#e5e7eb'</code></td><td>Fill used when no <code>values</code> are passed.</td></tr>
+                <tr><td><code>noDataColor</code></td><td><code>'#f3f4f6'</code></td><td>Fill for regions missing from <code>values</code>.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 class="cfg-group">Stroke</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Option</th><th>Default</th><th>What it does</th></tr></thead>
+              <tbody>
+                <tr><td><code>stroke</code></td><td><code>'#ffffff'</code></td><td>Boundary colour. <code>'none'</code> hides borders.</td></tr>
+                <tr><td><code>strokeWidth</code></td><td><code>0.8</code></td><td>Boundary width in SVG units.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 class="cfg-group">Layout</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Option</th><th>Default</th><th>What it does</th></tr></thead>
+              <tbody>
+                <tr><td><code>width</code></td><td><code>1000</code></td><td>Output SVG width in pixels. Height auto-derived.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 class="cfg-group">Labels</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Option</th><th>Default</th><th>What it does</th></tr></thead>
+              <tbody>
+                <tr><td><code>regionLabel</code></td><td><code>'none'</code></td><td><code>'code'</code> · <code>'name'</code> · <code>'none'</code> · or <code>(region) =&gt; string</code>.</td></tr>
+                <tr><td><code>showLabels</code></td><td><code>false</code></td><td>Legacy shortcut — <code>true</code> = <code>regionLabel: 'code'</code>.</td></tr>
+                <tr><td><code>labelSize</code></td><td><code>11</code></td><td>Font size for labels.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 class="cfg-group">Behavior</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Option</th><th>Default</th><th>What it does</th></tr></thead>
+              <tbody>
+                <tr><td><code>valueFormat</code></td><td>stringify</td><td><code>(value, code) =&gt; string</code> — used in tooltips and legend.</td></tr>
+                <tr><td><code>legend</code></td><td><code>false</code></td><td><code>true</code> or <code>{ position, title, steps, format }</code>.</td></tr>
+                <tr><td><code>highlight</code></td><td><code>[]</code></td><td>Region codes to emphasize — thicker stroke, painted last.</td></tr>
+                <tr><td><code>exclude</code></td><td><code>[]</code></td><td>Region codes to skip rendering entirely.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 class="cfg-group">DOM hooks</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Option</th><th>Default</th><th>What it does</th></tr></thead>
+              <tbody>
+                <tr><td><code>pathClassName</code></td><td><code>'ethiopia-region'</code></td><td>Class on each <code>&lt;path&gt;</code>.</td></tr>
+                <tr><td><code>svgClassName</code></td><td><code>'ethiopia-regions-map'</code></td><td>Class on the root <code>&lt;svg&gt;</code>.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p class="cfg-note">
+            Every <code>&lt;path&gt;</code> ships with <code>data-code</code>,
+            <code>data-name</code>, and <code>data-value</code> attributes —
+            so you can wire click/hover handlers without touching the package
+            again.
+          </p>
+
+          <h3 class="cfg-group">Palette gallery</h3>
+          <p class="section-lead">
+            All 10 built-in palettes, rendered live by the package.
+          </p>
+          <div id="palette-gallery" class="palette-gallery" aria-live="polite"></div>
+
+          <h3 class="cfg-group">Style presets</h3>
+          <p class="section-lead">
+            Drop-in <code>Partial&lt;RenderOptions&gt;</code> bundles. Spread
+            one into your options and override anything you want on top.
+          </p>
+          <div id="presets-gallery" class="presets-gallery" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <section id="api" class="section section-alt">
         <div class="container">
           <h2>API at a glance</h2>
           <p class="section-lead">
@@ -260,7 +373,7 @@ findEthiopianRegionByName('amhara')   // { code: 'AM', … }</code></pre>
         </div>
       </section>
 
-      <section id="regions" class="section section-alt">
+      <section id="regions" class="section">
         <div class="container">
           <h2>The 14 regions</h2>
           <p class="section-lead">
@@ -280,7 +393,7 @@ findEthiopianRegionByName('amhara')   // { code: 'AM', … }</code></pre>
         </div>
       </section>
 
-      <section class="section">
+      <section class="section section-alt">
         <div class="container narrow">
           <h2>About</h2>
           <p>
