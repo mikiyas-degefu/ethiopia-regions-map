@@ -1,0 +1,61 @@
+{
+  "name": "ethiopia-regions-map",
+  "version": "0.1.0",
+  "description": "Ethiopia's 14 admin1 regions (post-SNNPR split, 2025) as ready-to-render SVG paths + metadata. Zero runtime dependencies.",
+  "keywords": [
+    "ethiopia",
+    "map",
+    "regions",
+    "geojson",
+    "svg",
+    "choropleth",
+    "africa",
+    "geography",
+    "horn-of-africa",
+    "admin1"
+  ],
+  "license": "MIT",
+  "author": "Mikiyas Degefu <mikiyas.m.degefu@gmail.com> (https://github.com/mikiyas-degefu)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mikiyas-degefu/ethiopia-regions-map.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mikiyas-degefu/ethiopia-regions-map/issues"
+  },
+  "homepage": "https://github.com/mikiyas-degefu/ethiopia-regions-map#readme",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "tsup": "^8.3.5",
+    "typescript": "^5.6.3"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

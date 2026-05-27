@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ethiopia-regions-map · vanilla demo</title>
+    <style>
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, sans-serif;
+        background: #f8fafc;
+        color: #0f172a;
+        padding: 24px;
+      }
+      header { max-width: 880px; margin: 0 auto 16px; }
+      h1 { margin: 0 0 4px; font-size: 22px; }
+      p { margin: 0; color: #475569; font-size: 14px; }
+      main {
+        max-width: 880px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+      }
+      .controls {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+      .controls label { font-size: 13px; color: #334155; display: inline-flex; align-items: center; gap: 6px; }
+      select, button {
+        font: inherit;
+        padding: 6px 10px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        background: white;
+        cursor: pointer;
+      }
+      button { background: #0f172a; color: white; border-color: #0f172a; }
+      #map { width: 100%; }
+      .ethiopia-region { transition: opacity 0.15s; cursor: pointer; }
+      .ethiopia-region:hover { opacity: 0.7; }
+      #readout {
+        margin-top: 12px;
+        font-size: 13px;
+        color: #475569;
+        min-height: 20px;
+      }
+      footer { max-width: 880px; margin: 16px auto 0; font-size: 12px; color: #94a3b8; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Ethiopia · 14 Regions</h1>
+      <p>Vanilla JS demo of the <code>ethiopia-regions-map</code> package.</p>
+    </header>
+    <main>
+      <div class="controls">
+        <label>
+          Palette
+          <select id="palette">
+            <option value="green" selected>green</option>
+            <option value="blue">blue</option>
+            <option value="red">red</option>
+            <option value="amber">amber</option>
+            <option value="violet">violet</option>
+            <option value="teal">teal</option>
+            <option value="slate">slate</option>
+            <option value="diverging-rdbu">diverging-rdbu</option>
+            <option value="diverging-brbg">diverging-brbg</option>
+            <option value="diverging-piyg">diverging-piyg</option>
+          </select>
+        </label>
+        <label>
+          <input type="checkbox" id="labels" checked /> Show codes
+        </label>
+        <button id="randomize">Randomize values</button>
+      </div>
+      <div id="map"></div>
+      <div id="readout">Hover a region…</div>
+    </main>
+    <footer>Boundary data: geoBoundaries gbOpen 2025 · MIT-licensed package</footer>
+
+    <!--
+      Loaded from the local CJS build for offline preview. In a real project
+      you would `import { renderEthiopiaMap } from 'ethiopia-regions-map'`.
+    -->
+    <script type="module">
+      import {
+        renderEthiopiaMap,
+        ETHIOPIAN_REGIONS,
+      } from '../dist/index.js'
+
+      const codes = ETHIOPIAN_REGIONS.map((r) => r.code)
+      let values = randomValues()
+
+      function randomValues() {
+        const out = {}
+        for (const c of codes) out[c] = Math.round(Math.random() * 100)
+        return out
+      }
+
+      function draw() {
+        const palette = document.getElementById('palette').value
+        const showLabels = document.getElementById('labels').checked
+        const svg = renderEthiopiaMap({
+          values,
+          palette,
+          showLabels,
+          width: 840,
+        })
+        document.getElementById('map').innerHTML = svg
+      }
+
+      document.getElementById('palette').addEventListener('change', draw)
+      document.getElementById('labels').addEventListener('change', draw)
+      document.getElementById('randomize').addEventListener('click', () => {
+        values = randomValues()
+        draw()
+      })
+
+      document.getElementById('map').addEventListener('mouseover', (e) => {
+        const p = e.target.closest('.ethiopia-region')
+        if (!p) return
+        document.getElementById('readout').textContent =
+          `${p.dataset.name} (${p.dataset.code}) — ${p.dataset.value ?? 'no data'}`
+      })
+
+      draw()
+    </script>
+  </body>
+</html>
