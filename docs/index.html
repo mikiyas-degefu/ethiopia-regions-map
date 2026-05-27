@@ -200,6 +200,72 @@ findEthiopianRegionByName('amhara')   // { code: 'AM', … }</code></pre>
 })</code></pre>
             </div>
           </div>
+
+          <h3 class="cdn-subheading">Or use via CDN — no <code>npm install</code></h3>
+          <p class="section-lead">
+            Every npm release is automatically mirrored to public CDNs. Drop one
+            <code>&lt;script type="module"&gt;</code> into an HTML file and the
+            package works — no Node, no bundler, no <code>node_modules</code>.
+          </p>
+
+          <div class="snippet snippet-wide">
+            <h3>Plain HTML, no build step</h3>
+            <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;body&gt;
+    &lt;div id="map"&gt;&lt;/div&gt;
+    &lt;script type="module"&gt;
+      import { renderEthiopiaMap } from
+        'https://esm.sh/ethiopia-regions-map@0.2.0'
+
+      document.getElementById('map').innerHTML =
+        renderEthiopiaMap({
+          values: { OR: 35, AM: 21, TI: 5 },
+          palette: 'blue',
+          legend: { title: 'Demo', position: 'bottom-right' },
+          width: 800,
+        })
+    &lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+          </div>
+
+          <div class="table-wrap" style="margin-top:18px">
+            <table>
+              <thead>
+                <tr>
+                  <th>CDN</th>
+                  <th>URL (replace <code>0.2.0</code> with any version)</th>
+                  <th>Best for</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>esm.sh</td>
+                  <td><code>https://esm.sh/ethiopia-regions-map@0.2.0</code></td>
+                  <td>Browser ESM, auto-bundles deps — used by this site.</td>
+                </tr>
+                <tr>
+                  <td>jsDelivr</td>
+                  <td><code>https://cdn.jsdelivr.net/npm/ethiopia-regions-map@0.2.0/+esm</code></td>
+                  <td>Heavy global edge caching, supports SemVer ranges.</td>
+                </tr>
+                <tr>
+                  <td>unpkg</td>
+                  <td><code>https://unpkg.com/ethiopia-regions-map@0.2.0/dist/index.js</code></td>
+                  <td>Browse the npm folder structure directly in the URL.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p class="cfg-note" style="margin-top:14px">
+            <strong>Pinning tip:</strong> always include an explicit version
+            (<code>@0.2.0</code>) in production URLs. A bare
+            <code>ethiopia-regions-map</code> without <code>@version</code>
+            resolves to <em>latest</em> and will auto-jump across breaking
+            releases without warning.
+          </p>
         </div>
       </section>
 

@@ -406,6 +406,27 @@ h3 { font-size: 1.05rem; margin: 0 0 0.75rem; }
 }
 
 /* ---------------------------------------------------------------
+   CDN sub-section inside Quick start
+   --------------------------------------------------------------- */
+.cdn-subheading {
+  margin-top: 40px;
+  margin-bottom: 4px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--fg);
+}
+.cdn-subheading code {
+  font-size: 0.9em;
+  color: var(--accent);
+  background: transparent;
+  padding: 0;
+}
+.snippet-wide {
+  grid-column: 1 / -1;
+  margin-top: 18px;
+}
+
+/* ---------------------------------------------------------------
    Tables
    --------------------------------------------------------------- */
 .table-wrap {
